@@ -1,13 +1,12 @@
 import { Template } from "meteor/templating";
+import { Resolutions } from "../imports/api/resolution";
 import { ReactiveVar } from "meteor/reactive-var";
 
 import "./main.html";
 
 Template.body.helpers({
-  resolutions: [
-    { title: "My #1 resoultion" },
-    { title: "My #2 resoultion" },
-    { title: "My #3 resoultion" },
-    { title: "My #4 resoultion" }
-  ]
+  resolutions: function() {
+    console.log(Resolutions.find({}).fetch());
+    return Resolutions.find({});
+  }
 });
