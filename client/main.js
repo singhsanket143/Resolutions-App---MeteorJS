@@ -1,6 +1,8 @@
 import { Template } from "meteor/templating";
 import { Resolutions } from "../imports/api/resolution";
 import { ReactiveDict } from "meteor/reactive-dict";
+import "../imports/startup/accounts-config.js";
+import { Meteor } from "meteor/meteor";
 import { ReactiveVar } from "meteor/reactive-var";
 
 import "./main.html";
@@ -27,10 +29,7 @@ Template.body.helpers({
 Template.body.events({
   "submit .new-resolution": function(event) {
     var title = event.target.title.value;
-    Resolutions.insert({
-      title: title,
-      createdAt: new Date()
-    });
+    Meteor.call("resolution.insert", title);
     event.target.title.value = "";
     return false;
   },
@@ -42,9 +41,9 @@ Template.body.events({
 
 Template.resolution.events({
   "change .toggle-checked": function() {
-    Resolutions.update(this._id, { $set: { checked: !this.checked } });
+    Meteor.call("resolution.setChecked", this._id, !this.checked);
   },
   "click .delete": function() {
-    Resolutions.remove(this._id);
+    Meteor.call("resolution.remove", this._id);
   }
 });
